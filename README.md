@@ -7,5 +7,3 @@ This project is an end-to-end data engineering pipeline that collects weather da
 - `030_consumers`: Consumes data from Kafka and processes it.
 
 ## Project Structure
-
-git remote add origin git@github_personal:rstoltzm-profile/weather-data-engineering.git
