@@ -1,0 +1,8 @@
+schema:
+  city: str
+  temperature: float
+  humidity: int
+  pressure: int
+  weather: str
+  wind_speed: float
+  date: str
