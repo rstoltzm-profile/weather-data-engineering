@@ -1,40 +1,37 @@
-from kafka import KafkaConsumer
+from kafka import KafkaConsumer, KafkaProducer
 import json
-import pandas as pd
 import logging
 from typing import Any, Dict
 
 # Configuration constants
-KAFKA_TOPIC = 'weather_data'
+KAFKA_CONSUME_TOPIC = 'weather_data'
+KAFKA_PRODUCE_TOPIC = 'weather_data_processed'
 KAFKA_SERVER = '172.17.0.3:9092'
-DATA_FILE_PATH = '/app/data/transformed_weather_data.csv'
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def transform_data(data: Dict[str, Any]) -> pd.DataFrame:
+def transform_data(data: Dict[str, Any]) -> Dict[str, Any]:
     # Example transformation: Convert temperature from Kelvin to Celsius
     data['temperature'] = data['temperature'] - 273.15
-    return pd.DataFrame([data])
-
-def write_data(df: pd.DataFrame, file_path: str) -> None:
-    try:
-        df.to_csv(file_path, mode='a', header=not pd.io.common.file_exists(file_path), index=False)
-    except Exception as e:
-        logging.error(f"Error writing data to file: {e}")
-        raise
+    return data
 
 def consume_and_transform() -> None:
     consumer = KafkaConsumer(
-        KAFKA_TOPIC,
+        KAFKA_CONSUME_TOPIC,
         bootstrap_servers=KAFKA_SERVER,
         value_deserializer=lambda m: json.loads(m.decode('utf-8'))
     )
+    producer = KafkaProducer(
+        bootstrap_servers=KAFKA_SERVER,
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
     for message in consumer:
         data = message.value
-        df = transform_data(data)
-        write_data(df, DATA_FILE_PATH)
-        logging.info("Data transformed and saved to %s", DATA_FILE_PATH)
+        transformed_data = transform_data(data)
+        producer.send(KAFKA_PRODUCE_TOPIC, value=transformed_data)
+        producer.flush()
+        logging.info("Data transformed and sent to Kafka topic %s", KAFKA_PRODUCE_TOPIC)
 
 if __name__ == "__main__":
     consume_and_transform()
