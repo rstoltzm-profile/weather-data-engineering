@@ -7,6 +7,8 @@ This project is an end-to-end data engineering pipeline that collects weather da
 - `030_consumers`: Consumes data from Kafka and processes it.
 - `040_storage`: Telegraf and InfluxDB setup
 
+Each of these components will have README.md and image screenshots associated with them.
+
 ## Project Structure
 ![alt text](docs/images/diagram.png "diagram")
 
