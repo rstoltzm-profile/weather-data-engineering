@@ -2,10 +2,10 @@
 
 This project is an end-to-end data engineering pipeline that collects weather data, processes it using Kafka, and consumes the data for further processing and storage. The project is organized into several components:
 
-- `010_collection`: Collects weather data from the OpenWeatherMap API.
+- `010_collection`: Collects weather data from the OpenWeatherMap API. Sends it to Kafka.
 - `020_kafka`: Kafka setup for data streaming.
-- `030_consumers`: Consumes data from Kafka and processes it.
-- `040_storage`: Telegraf and InfluxDB setup
+- `030_consumers`: Consumes data from Kafka, processes it, and sends it back to Kafka.
+- `040_storage`: Telegraf reads from Kafka Topic and loads into InfluxDB.
 
 Each of these components will have README.md and image screenshots associated with them.
 
@@ -21,6 +21,12 @@ Each of these components will have README.md and image screenshots associated wi
 * kafka persistent storage strategy for zookeeper
 * kafka monitoring tool (kafka ui, burrow, etc)
 * can convert Docker containers to docker compose images, or use kubernetes
+
+## References
+* [telegraf](https://github.com/influxdata/telegraf)
+* [influxdb](https://www.influxdata.com/)
+* [kafka](https://hub.docker.com/r/confluentinc/cp-kafka)
+* [kafka-zookeeper](https://hub.docker.com/r/confluentinc/cp-zookeeper)
 
 ## Startup Order
 1. Zookeeper
