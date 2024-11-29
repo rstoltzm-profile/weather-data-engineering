@@ -8,8 +8,9 @@ This project is an end-to-end data engineering pipeline that collects weather da
 - `040_storage`: Telegraf and InfluxDB setup
 
 ## Project Structure
+![alt text](docs/images/diagram.png "diagram")
 
-## ToDo:
+## Next Steps:
 * Fix data load into influxdb to include location and other field info
 * influxdb persistent storage strategy
 * kafka persistent storage strategy for zookeeper
