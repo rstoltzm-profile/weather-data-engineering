@@ -12,6 +12,9 @@ Each of these components will have README.md and image screenshots associated wi
 ## Project Structure
 ![alt text](docs/images/diagram.png "diagram")
 
+## InfluxDB
+![alt text](docs/dashboards/table.png "table")
+
 ## Next Steps:
 * Fix data load into influxdb to include location and other field info
 * influxdb persistent storage strategy
