@@ -1,4 +1,6 @@
-53673993860bf1ee8348478a50d2cdf2
+# Steps
+1. create an account at openweathermap.org, get an api key for data
+2. Make sure to rename config_template.yaml to config.yaml and input an api key.
 
 ## Start container
 ```bash
