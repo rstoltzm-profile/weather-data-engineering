@@ -13,7 +13,7 @@ Each of these components will have README.md and image screenshots associated wi
 ![alt text](docs/update_1/diagram.png "diagram")
 
 ## InfluxDB
-![alt text](docs/dashboards/table.png "table")
+![alt text](docs/update_2/improved_buckets.png "table")
 
 ## Next Steps:
 * influxdb persistent storage strategy
