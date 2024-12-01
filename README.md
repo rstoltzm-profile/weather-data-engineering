@@ -20,6 +20,7 @@ Each of these components will have README.md and image screenshots associated wi
 * kafka persistent storage strategy for zookeeper
 * kafka monitoring tool (kafka ui, burrow, etc)
 * can convert Docker containers to docker compose images, or use kubernetes
+* grafana layer for enhanced visuals
 
 ## References
 * [telegraf](https://github.com/influxdata/telegraf)
