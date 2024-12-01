@@ -9,6 +9,9 @@ This project is an end-to-end data engineering pipeline that collects weather da
 
 Each of these components will have README.md and image screenshots associated with them.
 
+## Recent Update
+* [images](https://github.com/rstoltzm-profile/weather-data-engineering/tree/main/docs/update_2)
+
 ## Project Structure
 ![alt text](docs/update_1/diagram.png "diagram")
 
