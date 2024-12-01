@@ -17,6 +17,19 @@ KAFKA_TOPIC = 'weather_data'
 KAFKA_SERVER = '172.17.0.3:9092'
 SLEEP_INTERVAL = 60  # in seconds
 
+CITIES = [
+    "New York",
+    "Los Angeles",
+    "Chicago",
+    "Houston",
+    "Phoenix",
+    "Philadelphia",
+    "San Antonio",
+    "San Diego",
+    "Dallas",
+    "San Jose"
+]
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -58,25 +71,34 @@ def send_to_kafka(producer: KafkaProducer, topic: str, data: Dict[str, Any]) -> 
 def collect_weather_data() -> None:
     config = load_config(CONFIG_FILE)
     api_key = config['api_key']
-    url = URL_TEMPLATE.format(city=CITY, api_key=api_key)
     schema = load_schema(SCHEMA_FILE)
     producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER, value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+    
     while True:
-        data = get_weather_data(url)
-        if data:
-            weather = {
-                'city': data['name'],
-                'temperature': data['main']['temp'],
-                'humidity': data['main']['humidity'],
-                'pressure': data['main']['pressure'],
-                'weather': data['weather'][0]['description'],
-                'wind_speed': data['wind']['speed'],
-                'date': datetime.datetime.now().isoformat()  # Store raw datetime object
-            }
-            send_to_kafka(producer, KAFKA_TOPIC, weather)
-            logging.info("Data collected and sent to Kafka topic %s", KAFKA_TOPIC)
-        else:
-            logging.warning("Failed to retrieve data")
+        for city in CITIES:
+            url = URL_TEMPLATE.format(city=city, api_key=api_key)
+            data = get_weather_data(url)
+            if data:
+                weather = {
+                    'city': data['name'],
+                    'temperature': data['main']['temp'],
+                    'humidity': data['main']['humidity'],
+                    'pressure': data['main']['pressure'],
+                    'weather': data['weather'][0]['description'],
+                    'main': data['weather'][0]['main'],
+                    'temp_min': data['main']['temp_min'],
+                    'temp_max': data['main']['temp_max'],
+                    'wind_speed': data['wind']['speed'],
+                    'rain_1h': data['rain']['1h'] if 'rain' in data else 0,
+                    'snow_1h': data['snow']['1h'] if 'snow' in data else 0,
+                    'coord_lon': data['coord']['lon'],
+                    'coord_lat': data['coord']['lat'],
+                    'date': datetime.datetime.now().isoformat()  # Convert datetime to ISO format string
+                }
+                send_to_kafka(producer, KAFKA_TOPIC, weather)
+                logging.info("Data collected for %s and sent to Kafka topic %s", city, KAFKA_TOPIC)
+            else:
+                logging.warning("Failed to retrieve data for %s", city)
         
         # Wait for the specified interval before collecting data again
         time.sleep(SLEEP_INTERVAL)
